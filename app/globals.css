@@ -1,0 +1,742 @@
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #000;
+  overflow: hidden;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+}
+
+.orb-root {
+  position: fixed;
+  inset: 0;
+  cursor: grab;
+}
+
+.orb-root:active {
+  cursor: grabbing;
+}
+
+.orb-root canvas {
+  display: block;
+}
+
+/* Film grain overlay */
+.overlay-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 150px;
+  mix-blend-mode: screen;
+}
+
+/* Scanline overlay */
+.overlay-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  opacity: 0.3;
+}
+
+/* Vignette */
+.overlay-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* ——— HUD ——— */
+.hud {
+  position: fixed;
+  z-index: 20;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  user-select: none;
+}
+
+.hud-controls {
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.hud-btn {
+  min-width: 44px;
+  height: 44px;
+  padding: 0 12px;
+  background: rgba(0, 12, 22, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 4px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.12) inset;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(0, 30, 60, 0.7);
+  border-color: rgba(125, 211, 252, 0.9);
+  box-shadow:
+    0 0 14px rgba(56, 189, 248, 0.35),
+    0 0 12px rgba(14, 165, 233, 0.2) inset;
+}
+
+.hud-btn:active {
+  background: rgba(0, 45, 90, 0.8);
+}
+
+.hud-btn[aria-pressed="true"] {
+  background: rgba(0, 60, 120, 0.6);
+  border-color: #7dd3fc;
+  color: #7dd3fc;
+}
+
+.hud-row {
+  display: flex;
+  gap: 8px;
+}
+
+.hud-hint {
+  bottom: 24px;
+  left: 24px;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+}
+
+.hud-hint .key {
+  display: inline-block;
+  padding: 0 4px;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 3px;
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+.hud-title {
+  top: 24px;
+  left: 24px;
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  opacity: 0.7;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  pointer-events: none;
+}
+
+.hud-title-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  opacity: 0.55;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.hud-title::after {
+  content: "";
+  display: block;
+  margin-top: 6px;
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(56, 189, 248, 0.8), transparent);
+}
+
+.hud-error {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #ff5533;
+  text-shadow: 0 0 8px rgba(255, 60, 30, 0.7);
+}
+
+/* ——— Camera preview panel ——— */
+.camera-panel {
+  position: relative;
+  width: 208px;
+  height: 156px;
+  display: none;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #00080f;
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.15);
+}
+
+.camera-panel.visible {
+  display: block;
+}
+
+.camera-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror so it behaves like a mirror */
+  filter: sepia(1) hue-rotate(160deg) saturate(2.2) brightness(0.75)
+    contrast(1.15);
+  opacity: 0.85;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-status {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3px 6px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: #7dd3fc;
+  background: rgba(0, 8, 16, 0.65);
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.8);
+}
+
+@media (max-width: 600px) {
+  .hud-hint {
+    display: none;
+  }
+}
+
+/* ——— TAB SWITCHER ——— */
+.hud-tabs {
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px;
+  z-index: 25;
+}
+
+.hud-tab-btn {
+  padding: 6px 14px;
+  background: rgba(0, 12, 22, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 4px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
+}
+
+.hud-tab-btn.active {
+  background: rgba(0, 60, 120, 0.6);
+  border-color: #7dd3fc;
+  color: #7dd3fc;
+}
+
+/* ——— COMMAND PANEL ——— */
+.cmd-panel {
+  position: fixed;
+  top: 76px;
+  right: 24px;
+  bottom: 24px;
+  width: min(420px, calc(100vw - 48px));
+  z-index: 22;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(0, 6, 12, 0.72);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  padding: 14px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.12) inset;
+}
+
+.cmd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cmd-tasks {
+  display: flex;
+  gap: 6px;
+}
+
+.cmd-task-btn {
+  padding: 5px 10px;
+  background: transparent;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.cmd-task-btn.active {
+  background: rgba(0, 60, 120, 0.5);
+  border-color: #7dd3fc;
+  color: #7dd3fc;
+}
+
+.cmd-icon-btn {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  color: #38bdf8;
+  cursor: pointer;
+}
+
+.cmd-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px dashed rgba(56, 189, 248, 0.35);
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.cmd-settings label {
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.cmd-settings input[type="password"] {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  color: #bae6fd;
+  padding: 6px 8px;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 12px;
+}
+
+.cmd-settings-row {
+  display: flex;
+  align-items: center;
+}
+
+.cmd-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.cmd-settings-hint {
+  opacity: 0.55;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.cmd-settings-hint span {
+  color: #7dd3fc;
+}
+
+.cmd-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.cmd-log-empty {
+  opacity: 0.5;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+/* ——— IP TRACKING PANEL ——— */
+.ip-track-form {
+  display: flex;
+  gap: 8px;
+}
+
+.ip-track-results {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.ip-track-card {
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ip-track-headline {
+  font-size: 16px;
+  font-weight: bold;
+  color: #7dd3fc;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+}
+
+.ip-track-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ip-track-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ip-track-field-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
+}
+
+.ip-track-field-value {
+  font-size: 13px;
+  color: #bae6fd;
+}
+
+.ip-track-map-link {
+  align-self: flex-start;
+  color: #38bdf8;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.ip-track-map-link:hover {
+  color: #7dd3fc;
+  border-color: #7dd3fc;
+}
+
+@media (max-width: 600px) {
+  .ip-track-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cmd-msg {
+  font-size: 15px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cmd-msg-role {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+}
+
+.cmd-msg-user .cmd-msg-role {
+  color: #bae6fd;
+}
+
+.cmd-msg-assistant .cmd-msg-role {
+  color: #7dd3fc;
+}
+
+.cmd-msg-error {
+  color: #ff6644;
+}
+
+.cmd-thinking {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.cmd-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cmd-text-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 4px;
+  color: #bae6fd;
+  padding: 8px 10px;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 14px;
+}
+
+.cmd-mic-btn,
+.cmd-send-btn {
+  background: rgba(0, 12, 22, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 4px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.cmd-attach-btn {
+  background: rgba(0, 12, 22, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 4px;
+  color: #38bdf8;
+  font-size: 15px;
+  line-height: 1;
+  min-width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+.cmd-attach-btn:hover {
+  background: rgba(0, 30, 60, 0.7);
+  border-color: rgba(125, 211, 252, 0.9);
+}
+
+.cmd-attach-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cmd-file-input-hidden {
+  display: none;
+}
+
+.cmd-attach-error {
+  font-size: 11px;
+  color: #ff6644;
+  text-shadow: 0 0 6px rgba(255, 60, 30, 0.6);
+}
+
+.cmd-attach-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 6px;
+  background: rgba(0, 12, 22, 0.5);
+  font-size: 12px;
+}
+
+.cmd-attach-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.cmd-attach-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cmd-attach-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #bae6fd;
+}
+
+.cmd-attach-remove {
+  background: transparent;
+  border: none;
+  color: #7dd3fc;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 4px;
+}
+
+.cmd-attach-remove:hover {
+  color: #ff6644;
+}
+
+.cmd-mic-btn.listening {
+  background: rgba(180, 40, 0, 0.6);
+  border-color: #ff6644;
+  color: #ffcc99;
+}
+
+.cmd-send-btn:disabled,
+.cmd-mic-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .cmd-panel {
+    top: 64px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+}
+
+/* ——— Assistant title row + live mic indicator ——— */
+.cmd-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cmd-title {
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  font-weight: bold;
+  color: #7dd3fc;
+}
+
+.cmd-mic-dot {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+}
+
+.cmd-mic-dot.live {
+  opacity: 1;
+  color: #ff6644;
+  animation: cmd-pulse 1.1s ease-in-out infinite;
+}
+
+.cmd-mic-dot.off {
+  color: #4d7a99;
+}
+
+@keyframes cmd-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.cmd-mic-btn.muted {
+  opacity: 0.45;
+}
+
+/* ——— Always-on assistant status (visible from ORB screen too) ——— */
+.hud-assistant-status {
+  top: 66px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: min(360px, calc(100vw - 48px));
+}
+
+.assistant-mic-pill {
+  padding: 5px 12px;
+  background: rgba(0, 12, 22, 0.55);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 999px;
+  color: #38bdf8;
+  font-family: "Share Tech Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
+}
+
+.assistant-mic-pill.live {
+  border-color: #ff6644;
+  color: #ffcc99;
+  animation: cmd-pulse 1.1s ease-in-out infinite;
+}
+
+.assistant-mic-pill.muted {
+  opacity: 0.5;
+}
+
+.assistant-toast {
+  padding: 10px 14px;
+  background: rgba(0, 6, 12, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 6px;
+  color: #bae6fd;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: right;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.assistant-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* "Do a barrel roll" — a one-shot 360° spin of the whole viewport,
+   triggered by adding this class to <body> for the animation's duration
+   (see hooks/useAssistant.ts). transform-origin stays centered so it reads
+   as the screen itself rolling, not sliding off some corner. */
+@keyframes ultron-barrel-roll {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ultron-barrel-roll {
+  animation: ultron-barrel-roll 1.1s ease-in-out;
+  transform-origin: 50% 50%;
+}
