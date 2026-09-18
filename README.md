@@ -1,186 +1,542 @@
-# ULTRON Orb UI
+# 🤖 ADVANCE ULTRON
 
-An Iron Man–inspired holographic orb built with **Next.js**, **Three.js**, and **MediaPipe** hand tracking — control it with your bare hands through your webcam.
+### Next-Generation AI Desktop Assistant
 
-> 🔮 This is the open-source **interface** of [ULTRON](https://sagartamang.com/projects/ultron) — my AI that talks in real time and controls Android devices by itself. **[Read the write-up](https://sagartamang.com/projects/ultron)** or **[the X post](https://x.com/sagar_builds/status/2077277583646101921)**
+**ULTRON** is an advanced AI-powered desktop assistant designed to combine natural language interaction, voice commands, intelligent automation, web intelligence, and desktop control into one futuristic interface.
 
-> 📱 **[Watch the demo on Instagram](https://www.instagram.com/p/DayJ17OTwvx/)**
+Inspired by cinematic AI assistants, Advance ULTRON is built to do more than simply answer questions — it can understand user commands, interact with applications, open websites, search the web, read on-screen content, generate code and documents, manage files, create reminders, and communicate through voice.
 
-![ULTRON orb UI](docs/screenshot.png)
+> **Think. Understand. Execute.**
 
-https://github.com/user-attachments/assets/91578a83-9a27-44e8-84b0-96defcfd7366
+---
 
-## Getting started
+## ✨ Project Overview
+
+Advance ULTRON provides a modern AI assistant experience through a futuristic holographic-style interface.
+
+The system combines:
+
+* 🧠 **AI-powered command understanding**
+* 🎙️ **Voice interaction**
+* 💬 **Natural language chat**
+* 🌐 **Web search & live information**
+* 🖥️ **Desktop application control**
+* 📖 **Screen reading**
+* 💻 **AI code generation**
+* 📝 **Document & letter generation**
+* 📧 **Email automation**
+* 💬 **WhatsApp message drafting**
+* ⏰ **Smart reminders**
+* 📂 **File management**
+* 🖐️ **Hand-gesture interaction**
+* 🔮 **Interactive 3D holographic UI**
+
+The current repository contains a Next.js-based interface with a Three.js-powered orb, MediaPipe hand tracking, and an AI command system.
+
+---
+
+# 🚀 Key Features
+
+## 🧠 AI Command Intelligence
+
+ULTRON interprets natural-language commands and determines what action should be performed.
+
+Instead of navigating through multiple menus, users can simply tell ULTRON what they want.
+
+### Example
+
+```text
+"Open Notepad"
+
+"Open YouTube"
+
+"Search latest technology news"
+
+"Play a song on YouTube"
+
+"Write a Python script to rename files"
+
+"Remind me in 20 minutes"
+
+"Read the current window"
+```
+
+The assistant automatically classifies commands and routes them to the appropriate functionality.
+
+---
+
+# 🎙️ Voice Assistant
+
+ULTRON supports natural voice interaction.
+
+### Voice capabilities include:
+
+* Continuous voice input
+* Voice command processing
+* Spoken AI responses
+* Microphone mute/unmute
+* Automatic listening control while ULTRON speaks
+* Natural-language command recognition
+
+Users can interact with ULTRON without constantly typing commands.
+
+---
+
+# 🔮 Futuristic 3D Orb Interface
+
+The ULTRON interface features a futuristic interactive orb powered by **Three.js**.
+
+The visual system includes:
+
+* Layered wireframe structures
+* Spiral inner core
+* Floating code particles
+* Orbiting elements
+* Dust particles
+* Scan rings
+* Bloom effects
+* Chromatic-aberration effects
+* Interactive camera controls
+
+The main interface is implemented through the project's orb scene and `JarvisOrb` component.
+
+---
+
+# 🖐️ AI Hand Gesture Control
+
+ULTRON can use the device webcam for hand-based interaction through **MediaPipe HandLandmarker**.
+
+### Supported gestures
+
+| Gesture        | Action                 |
+| -------------- | ---------------------- |
+| One-hand pinch | Rotate the orb         |
+| Two-hand pinch | Zoom control           |
+| Hand movement  | Interactive navigation |
+
+Users can enable or disable gesture control directly from the interface.
+
+Keyboard shortcuts are also available:
+
+```text
+G       → Toggle gestures
+R       → Reset view
++       → Zoom in
+-       → Zoom out
+```
+
+---
+
+# 🖥️ Desktop Automation
+
+ULTRON can interact with supported desktop applications.
+
+It can open applications such as:
+
+* Notepad
+* Calculator
+* Paint
+* File Explorer
+* Command Prompt
+* Task Manager
+* WordPad
+
+Application launching uses a controlled allowlist, while URLs are validated before opening.
+
+---
+
+# 🌐 Web Intelligence
+
+ULTRON can distinguish between normal knowledge questions and information that requires current web results.
+
+Examples:
+
+```text
+"Search latest technology news"
+
+"Give me today's world news"
+
+"Search news about Pakistan"
+```
+
+For current-information requests, the system can gather fresh search results and convert them into a concise spoken briefing.
+
+---
+
+# 📖 Intelligent Screen Reading
+
+ULTRON can read visible text from the currently focused window.
+
+For example:
+
+```text
+"Read the current window."
+
+"What does this page say about pricing?"
+
+"Summarize what is currently open."
+```
+
+On Windows, this functionality uses UI Automation to access rendered text rather than relying on screenshots or OCR.
+
+---
+
+# 💻 AI Code Generation
+
+ULTRON can generate code from natural-language instructions.
+
+### Example
+
+```text
+"Write a login page."
+
+"Write a Python script to rename files."
+
+"Create HTML and CSS for a portfolio website."
+```
+
+Generated code can be opened directly in Visual Studio Code and stored separately from the ULTRON source code. Existing files are protected from accidental overwriting by creating a numbered copy.
+
+---
+
+# 📝 AI Document Generation
+
+ULTRON can generate formal documents and applications through voice or text.
+
+Example:
+
+```text
+"Write a leave application for two days."
+
+"Write an application for medical leave."
+
+"Create a formal request letter."
+```
+
+Missing information is represented using placeholders so the generated document can be edited before submission.
+
+---
+
+# 📧 Email Automation
+
+ULTRON supports email sending through SMTP.
+
+It can:
+
+* Compose emails
+* Send emails
+* Attach permitted files
+* Process natural-language email commands
+
+Example:
+
+```text
+"Send an email to someone@example.com saying hello."
+
+"Send index.html to someone@example.com."
+```
+
+Email credentials are configured locally and are not intended to be committed to the repository.
+
+---
+
+# 💬 WhatsApp Message Drafting
+
+ULTRON can prepare WhatsApp messages from natural-language commands.
+
+Example:
+
+```text
+"Send a WhatsApp message saying I'm on my way."
+```
+
+For safety, the message is prepared in WhatsApp but is **not automatically sent**; the user performs the final send action.
+
+---
+
+# ⏰ Smart Reminders
+
+ULTRON can understand natural-language reminder requests.
+
+Examples:
+
+```text
+"Remind me in 20 minutes to call mom."
+
+"Remind me after 8 minutes to eat."
+
+"Remind me at 5 PM to study."
+```
+
+The assistant calculates the requested delay/time and provides a confirmation.
+
+> **Note:** The current reminder system operates while ULTRON is open and is limited to a 24-hour window.
+
+---
+
+# 📂 File Management
+
+ULTRON provides controlled file-copy operations.
+
+Example:
+
+```text
+"Copy index.html to desktop."
+
+"Copy all files from Downloads to Backup."
+```
+
+The system restricts supported destinations and avoids overwriting same-named files by creating numbered copies. Bulk operations are also limited to prevent uncontrolled processing.
+
+---
+
+# 🏗️ Technology Stack
+
+| Technology     | Purpose                       |
+| -------------- | ----------------------------- |
+| **Next.js**    | Application framework         |
+| **TypeScript** | Type-safe development         |
+| **React**      | UI components                 |
+| **Three.js**   | 3D holographic interface      |
+| **MediaPipe**  | Hand tracking                 |
+| **Gemini AI**  | Natural-language intelligence |
+| **Electron**   | Windows desktop application   |
+| **Node.js**    | Runtime environment           |
+| **Web APIs**   | Voice & browser interaction   |
+
+The repository currently contains `app`, `components`, `data`, `docs`, `history`, `hooks`, and `lib` directories alongside the Next.js/Electron configuration.
+
+---
+
+
+---
+
+# ⚡ Installation
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/HussainMehdiIqbal/Advance-ULTRON.git
+```
+
+```bash
+cd Advance-ULTRON
+```
+
+## 2. Install Dependencies
 
 ```bash
 npm install
+```
+
+## 3. Start Development Server
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Then open:
 
-## Controls
+```text
+http://localhost:3000
+```
 
-### Mouse / touch
+The repository's documented development flow uses `npm install` followed by `npm run dev`.
 
-| Input | Action |
-| --- | --- |
-| Drag | Spin the orb |
-| Scroll / pinch | Zoom in & out |
+---
 
-### Hand gestures (webcam)
+# 🪟 Windows Desktop Mode
 
-Click **GESTURES OFF** (or press `G`) and allow camera access, then:
+ULTRON can also be launched as a Windows desktop application.
 
-| Gesture | Action |
-| --- | --- |
-| Pinch (thumb + index) one hand and move it | Spin the orb |
-| Pinch with **both** hands, spread apart / bring together | Zoom in / out |
+Simply run:
 
-### Keyboard
+```text
+start-ultron.bat
+```
 
-| Key | Action |
-| --- | --- |
-| `G` | Toggle hand gestures |
-| `R` | Reset the view |
-| `+` / `−` | Zoom in / out |
+The launcher starts the Next.js server and opens the application through Electron in a native desktop window.
 
-## Running it as a desktop app (Windows)
+---
 
-Double-click **`start-ultron.bat`**. On first run it installs everything
-(Node.js must already be installed — get it from https://nodejs.org if you
-don't have it), then opens ULTRON in its own app window instead of a browser
-tab. Later runs skip straight to launching.
+# 🔐 Security & Privacy
 
-Under the hood, `main.js` (Electron) starts the Next.js server for you and
-loads it into a native window — closing the window shuts the server down too.
+Advance ULTRON is designed with controlled system interaction in mind.
 
-## COMMAND tab: typed + voice AI assistant
+Important protections include:
 
-Click the **COMMAND** tab (top-right) to open a chat panel next to the orb:
+* API credentials are intended to remain local.
+* Supported desktop applications use an allowlist.
+* URLs are validated before opening.
+* WhatsApp messages require manual final sending.
+* File operations use restricted locations.
+* Existing files are not silently overwritten.
+* Email attachments are restricted to permitted locations.
 
-- **Voice starts automatically** — no click needed. As soon as the tab
-  mounts, the mic listens continuously, pauses itself while ULTRON is
-  speaking (so it doesn't hear itself), and re-arms right after. Click the
-  🎙/🔇 button to mute/unmute it. You can also just type and hit SEND.
-- Every message — typed or spoken — is automatically classified by Gemini
-  into one of: plain **chat**, **web search**, **open an app**, **open a
-  website**, **play a song on YouTube**, or **draft a WhatsApp message**.
-  You don't need to pick a mode; just say what you want:
-  - "open notepad" / "open calculator" / "open file explorer"
-  - "open youtube" / "open gmail"
-  - "play shape of you"
-  - "search latest tech news"
-  - "send whatsapp message to 923001234567 saying I'm on my way"
-- WhatsApp messages are **pre-filled but never auto-sent** — ULTRON opens
-  the chat with your text typed in, you press Enter yourself. This is
-  intentional so a misheard command or AI mistake can never send a message
-  on its own.
-- **Email actually sends**, unlike WhatsApp — say "send email to
-  someone@example.com saying hi how are you" and it goes out for real over
-  SMTP. Add a file too: "send index.html to someone@example.com" attaches
-  it. ULTRON only looks for the bare filename you give it — it never
-  accepts a path — and only inside the project's `data/shared` folder, the
-  project itself, or your Desktop/Downloads/Documents, so it can't be made
-  to read arbitrary files off your machine. Set it up once in Settings ⚙:
-  - Your email address and a Gmail **App Password** (not your normal
-    password — enable 2-Step Verification, then create one at
-    myaccount.google.com/apppasswords). Other SMTP providers work too if
-    you're comfortable editing `lib/emailActions.ts`'s default host/port.
-  - Like the Gemini key, this is saved only in your browser's local
-    storage and used from `app/api/assistant/route.ts` purely to log in to
-    the SMTP server — it's never committed or sent anywhere else.
-- **Reads whatever's on your screen** — say "read the current window" or
-  ask something specific like "what does this page say about pricing"
-  while a browser tab (Google results, a ChatGPT/Claude reply, an article)
-  or any app is focused, and ULTRON reads its visible text and
-  answers/summarizes it out loud. On Windows this uses UI Automation — the
-  same accessibility layer screen readers use — so it reads real rendered
-  text, no screenshot or OCR involved. It only ever reads the window that
-  currently has OS focus, the same target as "close it"/"minimize it".
-  macOS and Linux support is best-effort (see `lib/screenReader.ts`) since
-  neither has as complete an accessibility API as Windows' UIA.
-- **Writes applications/letters for you** — say "write a medical leave
-  application, I'm Hussain, reason is fever, for tomorrow" or "write me a
-  leave request for 2 days" and ULTRON drafts a complete, formally
-  formatted letter and opens it straight into Notepad, pasted in and ready
-  to read/edit — no typing needed. It never stops to ask for missing
-  details; anything you didn't specify (your name, exact dates, recipient)
-  comes back as a `[bracketed placeholder]` you fill in yourself, so the
-  request never stalls waiting for information. Say "in WordPad" if you'd
-  rather it opened there instead of Notepad. Text is inserted via a
-  clipboard paste rather than simulated typing, which is instant and
-  handles any punctuation in the letter correctly — note this does
-  overwrite whatever was on your clipboard.
-- **Writes code for you** — say "write a code of login page" or "write a
-  python script to rename files in a folder" and ULTRON generates a
-  complete, working file and opens it directly in VS Code. It picks a
-  sensible filename/extension itself (or follows the language you named)
-  and saves it to an `ULTRON Code` folder in your home directory — kept
-  separate from ULTRON's own project source so it's easy to find and never
-  collides with this codebase. If a file called that already exists, it
-  saves as `name (2).ext` instead of overwriting it. Requires VS Code's
-  `code` CLI to be on your PATH (VS Code's Command Palette →
-  `Shell Command: Install 'code' command in PATH` sets this up in one
-  click) — if that's missing, the file is still generated and saved, you'd
-  just need to open it manually.
-- **World news briefing** — say "give me the latest world news" or narrow
-  it down with "news about Pakistan" / "any tech news today" and ULTRON
-  pulls several fresh, deduplicated search results (biased toward the last
-  day) and has Gemini turn them into a short spoken briefing of 4-6
-  distinct headlines — not just one answer to one question, which is what
-  the general web-search action gives you. If the live results genuinely
-  don't contain real current news, it says so rather than inventing
-  headlines. General knowledge questions (facts, history, "how does X
-  work") are answered directly and confidently without needing a search at
-  all — search is reserved for things that actually change over time.
-- **Reminders** — say "after 8 min remember me to eat burger" or "remind
-  me to call mom in 20 minutes" and ULTRON works out the delay (Gemini is
-  given the current date/time so it can also handle "remind me at 5pm to
-  X") and confirms it back to you immediately. When it fires, you get a
-  spoken reminder, a message in the chat log, and — if you've allowed
-  notifications for the app — a desktop notification too. This is a
-  plain in-tab timer, not an OS-level scheduled task, so it only fires
-  while ULTRON is open and is lost if you close or reload the app; it's
-  also capped at 24 hours out.
-- **Copy/paste files between folders** — "copy index.html to desktop" finds
-  that file (same search locations as the email-attachment feature — the
-  project, Desktop, Downloads, Documents) and copies it there; "copy all
-  files from downloads to a folder called Backup" copies every top-level
-  file from Downloads into `Documents/Backup` (created if it doesn't
-  exist). Destinations resolve only to Desktop/Downloads/Documents/
-  Pictures/Music/Videos, or a new subfolder inside Documents if you name
-  something else — never an arbitrary path. A same-named file at the
-  destination is never overwritten; it's saved as `name (2).ext` instead.
-  Bulk copies only touch files, never subfolders, and are capped at 200
-  files per request. Either side can also be "the current window" — "select
-  all files in this window and paste them on desktop" — which asks
-  whatever File Explorer (or Finder on macOS) window currently has focus
-  what folder it's showing, the same target every other "current window"
-  feature in ULTRON uses. Not supported on Linux, where there's no single
-  reliable API for this across desktop environments.
-- Replies are **spoken aloud** (toggle this in Settings ⚙).
-- The first time you open it, paste your **Gemini API key** into Settings
-  (get one free at aistudio.google.com/apikey). It's saved only in your
-  browser's local storage and is used from `app/api/assistant/route.ts` —
-  it never gets committed to the repo or sent anywhere but Google's API.
-- App-opening and URL-opening happen on your own machine via the Next.js
-  server process (`lib/systemActions.ts`) — apps are launched from a fixed
-  allowlist (notepad, calculator, paint, explorer, cmd, task manager,
-  wordpad), and any URL is validated as http/https before being opened, so
-  a bad AI guess can't run arbitrary commands.
+Always review commands and permissions before allowing an AI assistant to interact with your computer.
 
-## How it works
+---
 
-- **`lib/orbScene.ts`** — the Three.js scene: layered wireframe shells, a spiral
-  inner core, floating code-text sprites, orbiting debris, dust particles, scan
-  rings, and a bloom + chromatic-aberration post-processing stack.
-- **`lib/handTracker.ts`** — MediaPipe HandLandmarker running on the webcam
-  feed. Pinch detection with hysteresis: one pinched hand spins the orb, two
-  pinched hands zoom by spreading apart or together.
-- **`components/JarvisOrb.tsx`** — the HUD and glue between the scene, the
-  tracker, and your inputs.
+# 🔑 Gemini API Configuration
 
-## License
+ULTRON uses Gemini for its AI command-processing capabilities.
 
-MIT
+The project documentation indicates that the Gemini API key is configured through the application's settings and stored in browser local storage rather than committed to the repository.
+
+**Never commit API keys, passwords, tokens, or other secrets to GitHub.**
+
+---
+
+# 🎮 Interaction Modes
+
+### 🖱️ Mouse / Touch
+
+```text
+Drag              → Rotate Orb
+Scroll / Pinch    → Zoom
+```
+
+### 🖐️ Hand Tracking
+
+```text
+One-hand pinch   → Rotate
+Two-hand pinch   → Zoom
+```
+
+### ⌨️ Keyboard
+
+```text
+G → Toggle Gestures
+R → Reset
++ → Zoom In
+- → Zoom Out
+```
+
+---
+
+# 🎯 Use Cases
+
+Advance ULTRON can be used as a foundation for:
+
+* Personal AI assistants
+* Desktop automation
+* AI productivity tools
+* Voice-controlled applications
+* Smart workspace systems
+* Developer assistants
+* AI learning projects
+* Human-computer interaction research
+* Experimental agentic AI systems
+
+---
+
+# 🛣️ Future Roadmap
+
+Potential future improvements include:
+
+* [ ] Persistent long-term memory
+* [ ] Custom wake-word detection
+* [ ] Multi-user profiles
+* [ ] Advanced AI agents
+* [ ] More desktop integrations
+* [ ] Expanded application controls
+* [ ] Calendar integration
+* [ ] Task management
+* [ ] Smart notification system
+* [ ] Mobile companion application
+* [ ] Advanced personalization
+* [ ] More gesture controls
+* [ ] Plugin/tool architecture
+* [ ] Offline AI capabilities
+* [ ] Improved security sandboxing
+
+---
+
+# 📸 Interface
+
+> Add your project screenshots or demo GIFs here.
+
+```markdown
+![ULTRON Interface](docs/images/ultron-interface.png)
+
+![ULTRON Command Center](docs/images/command-center.png)
+
+![Hand Gesture Control](docs/images/hand-gesture.png)
+```
+
+---
+
+# 🎥 Demo
+
+Add your project demonstration video here:
+
+```markdown
+[▶️ Watch ULTRON Demo](YOUR-DEMO-LINK)
+```
+
+---
+
+# 👨‍💻 Developer
+
+## Hussain Mehdi Iqbal
+
+**BS Information Technology**
+
+Passionate about:
+
+* Artificial Intelligence
+* Software Development
+* Web Development
+* Automation
+* Cybersecurity
+* Human-Computer Interaction
+* Emerging Technologies
+
+---
+
+# 🌟 Project Highlights
+
+```text
+AI-Powered
+Voice-Controlled
+Desktop Automation
+3D Holographic UI
+Hand Gesture Interaction
+Web Intelligence
+Code Generation
+File Automation
+Email Automation
+Smart Reminders
+Screen Reading
+Cross-Platform Architecture
+```
+
+---
+
+# 📜 License
+
+This project is released under the **MIT License**.
+
+---
+
+# ⭐ Support the Project
+
+If you find **Advance ULTRON** interesting:
+
+⭐ Star the repository
+🍴 Fork the project
+🐛 Report issues
+💡 Suggest improvements
+🤝 Contribute to the project
+
+---
+
+<div align="center">
+
+# 🤖 ADVANCE ULTRON
+
+### **Your AI. Your Commands. Your Digital Assistant.**
+
+**Built with AI • Designed for Automation • Created for the Future**
+
+</div>
